@@ -1,13 +1,19 @@
 #from my_app import app
 from crypt import methods
-from os import abort
 from flask import Blueprint, render_template, abort, request, redirect, url_for, flash, get_flashed_messages
+from flask_login import login_required
 
-from my_app import db
+from my_app import db, rol_admin_need
 from my_app.product.model.category import Category, CategoryForm
 from sqlalchemy.sql.expression import not_, or_
 
 category = Blueprint('category',__name__)
+
+@category.before_request
+@login_required
+@rol_admin_need
+def constructor():
+   pass
 
 @category.route('/category')
 @category.route('/category/<int:page>')
