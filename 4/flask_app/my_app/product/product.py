@@ -4,6 +4,7 @@ from os import abort
 from flask import Blueprint, render_template, abort, request, redirect, url_for, flash, get_flashed_messages
 from my_app import db
 from my_app.product.model.products import PRODUCTS
+from my_app.product.model.category import Category
 from my_app.product.model.product import Product, ProductForm
 from my_app.product.model.product import ProductForm
 from sqlalchemy.sql.expression import not_, or_
@@ -15,8 +16,9 @@ product = Blueprint('product',__name__)
 def index(page=1):
    return render_template('product/index.html',products=Product.query.paginate(page,5))
 
-@product.route('/product/<int:id>')
+@product.route('/show/<int:id>')
 def show(id):
+   print(id)
    product = Product.query.get_or_404(id)
    #if not product:
    #   abort(404)
@@ -64,8 +66,13 @@ def filter(id):
 @product.route('/product-create', methods=['GET','POST'])
 def create():
    form = ProductForm(meta={'csrf':False})
+
+   categories = [(c.id, c.name) for c in Category.query.all()]
+   print(categories)
+   form.category_id.choices = categories
+   
    if form.validate_on_submit():
-      p = Product(request.form['name'],request.form['price'])
+      p = Product(request.form['name'],request.form['price'],request.form['category_id'])
       db.session.add(p)
       db.session.commit()
       flash('Producto creado con exito')
@@ -81,14 +88,22 @@ def update(id):
    product = Product.query.get_or_404(id)
    form = ProductForm(meta={'csrf':False})
 
+   categories = [(c.id, c.name) for c in Category.query.all()]
+   
+   form.category_id.choices = categories
+
+   print(product.category)
+
    if request.method == 'GET':
       form.name.data = product.name
       form.price.data = product.price
+      form.category_id.data = product.category_id
    
    if form.validate_on_submit():
       #Actualziar Producto
       product.name = form.name.data
       product.price = form.price.data
+      product.category_id = form.category_id.data
 
       db.session.add(product)
       db.session.commit()

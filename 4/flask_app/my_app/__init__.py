@@ -8,11 +8,12 @@ app = Flask(__name__)
 app.config.from_object('configuration.DevelopmentConfig')
 db = SQLAlchemy(app)
 
-from my_app.product.views import product
+from my_app.product.product import product
+from my_app.product.category import category
 app.register_blueprint(product)
+app.register_blueprint(category)
 
 db.create_all()
-
 
 @app.template_filter('mydouble')
 def reverse_filter(n:float):
