@@ -1,0 +1,26 @@
+<h3> {{ product['name'] }}</h3>
+<h3> {{ product['category'] }}</h3>
+<h3> $ {{ product['price'] }}</h3>
+<h3> Filtro Default: $ {{ product['price'] | default('Sin Precio',True)}}</h3>
+
+{{ "<h1>Hola Mundo</h1>" | safe}}
+
+<p>{{ "Esto es la descripción de un producto bastante chulo" | truncate(5) }}</p>
+
+<p>{{ "Filtro Count: Esto es la descripción de un producto bastante chulo" | count }}</p>
+
+<p>{{ 70.7 | float }}</p>
+
+<p>{{ 70.1 | int }}</p>
+
+<p> {{ 3.1415026535 | round(3) }}</p>
+
+<p> {{ ['iPhone', 'Moto Z3'] | join(",") }}</p>
+
+<p> {{ ['iPhone', 'Moto Z3'] | length }} </p>
+
+<p> {{{'offer' : False, 'price' : 50.5, 'k' : 45 } | tojson }} </p>
+
+<p> Filtro  Global Custom {{ 50  | mydouble }}</p>
+
+<p> Filtro  Local Custom {{ product | iva }}</p>
